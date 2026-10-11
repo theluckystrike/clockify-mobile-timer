@@ -1,0 +1,157 @@
+/* Styles for Mobile Timer for Clockify. Obsidian loads this file while the plugin is enabled. */
+.tmt-panel {
+	padding: var(--size-4-4);
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-3);
+}
+
+.tmt-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	align-self: flex-start;
+	max-width: 100%;
+	padding: var(--size-2-2) var(--size-4-3);
+	border-radius: var(--radius-xl);
+	background: var(--background-secondary);
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+}
+
+.tmt-pill-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tmt-dot {
+	flex: none;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--text-faint);
+}
+
+.tmt-running .tmt-dot {
+	background: var(--color-red);
+}
+
+.tmt-limited .tmt-dot,
+.tmt-offline .tmt-dot {
+	background: var(--color-orange);
+}
+
+.tmt-clock {
+	font-size: var(--font-ui-large);
+	font-weight: var(--font-bold);
+	font-variant-numeric: tabular-nums;
+}
+
+.tmt-today {
+	color: var(--text-muted);
+}
+
+.tmt-buttons {
+	display: flex;
+	gap: var(--size-4-2);
+}
+
+.tmt-buttons button {
+	min-height: var(--input-height);
+	min-width: 96px;
+}
+
+.tmt-meta {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.tmt-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.tmt-row {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) 0;
+	border-bottom: 1px solid var(--background-modifier-border);
+	font-size: var(--font-ui-small);
+}
+
+.tmt-time {
+	flex: none;
+	color: var(--text-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+.tmt-desc {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tmt-dur {
+	flex: none;
+	font-variant-numeric: tabular-nums;
+}
+
+.tmt-proj-dot {
+	display: inline-block;
+	flex: none;
+	width: 8px;
+	height: 8px;
+	margin-right: var(--size-2-2);
+	border-radius: 50%;
+	background: var(--tmt-color, var(--text-faint));
+}
+
+.tmt-empty,
+.tmt-hint {
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+	padding: var(--size-4-2) 0;
+}
+
+.tmt-error {
+	color: var(--text-error);
+}
+
+.tmt-ribbon-running {
+	color: var(--color-red);
+}
+
+.tmt-status {
+	cursor: pointer;
+}
+
+.tmt-report {
+	margin: var(--size-4-2) 0;
+}
+
+.tmt-report-table {
+	width: 100%;
+}
+
+.tmt-num {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+.tmt-bar {
+	height: 4px;
+	margin-top: 2px;
+	border-radius: 2px;
+	background: var(--interactive-accent);
+	width: var(--tmt-width, 0%);
+}
+
+.tmt-report-note,
+.tmt-locked {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
