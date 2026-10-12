@@ -1,6 +1,6 @@
 {
 	"name": "clockify-mobile-timer",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"private": true,
 	"description": "Starts, stops and switches your Clockify timer from a note, on phone and desktop, and shows the running timer and today's total.",
 	"main": "main.js",

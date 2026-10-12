@@ -87,13 +87,13 @@ A timer that you start in Clockify shows after the next refresh.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/clockify-mobile-timer/HEAD/docs/pro-settings.png" alt="The Pro section of the settings before sign in, with the sponsor button and the GitHub sign in" width="720">
 
-Pro unlocks the report block, edit and delete, the pickers, a project for each note, and the offline queue. $5 a month, or $15 once. When you have paid $15 in total, Pro stays on.
+Pro unlocks the report block, edit and delete, the pickers, a project for each note, and the offline queue. $5 a month, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply.
 
 1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike).
 2. In the plugin settings, select "Sign in with GitHub".
 3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
 
-If a monthly sponsorship ends before you have paid $15 in total, Pro turns off at the next check, within 7 days.
+A negative sponsorship answer turns Pro off. See [Payment, account and network](#payment-account-and-network) for the check and offline limits.
 
 ## Settings
 
@@ -123,17 +123,17 @@ No. Obsidian keeps secrets on the device. Paste the key on each device.
 
 ## Payment, account and network
 
-The core features are free and stay free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. When you have paid $15 in total, Pro stays on. Your notes stay readable and editable with or without Pro.
+The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike. You need a Clockify account for every feature, free or Pro. Pro also needs the GitHub account that sponsors.
 
 Mobile Timer for Clockify talks to Clockify through its public API at `https://api.clockify.me/api/v1`, only after you save a Clockify API key in the settings. It stays in the secret storage of Obsidian on this device, not in data.json or in a note. Each request carries it in the X-Api-Key header. When you start, stop, edit or delete a timer, the plugin sends the time entry data the call needs: the description, the project id, the tag ids, the start and end time, and, on an edit, the task id and the billable flag. The workspace id, the user id and the entry id are in the address of the request. When you start a timer from a note, the title of the note becomes the description and is sent to Clockify. That happens when you run "Start timer for this note", and when you select Start in the Start window, which opens with the title in its box. The title is the file name without the folder and the extension, cut at 120 characters. Turn off "Use the note title as the description" to send no title. The plugin sends no note content, no folder path and no other vault data, and it has no telemetry. It reads your name, user id, default workspace, projects, tags, running timer and time entries from Clockify when Obsidian opens, when you return to the app or go online, when you open the panel, when you select Refresh, Check connection or Load projects, and when a report block draws. With Pro it also reads when you open the Start window. Each request shows Clockify your IP address. The plugin keeps a copy of your recent entries, projects, tags and queued changes in data.json in your vault. Mobile Timer for Clockify is an unofficial plugin. It is not affiliated with, made by or approved by Clockify or CAKE.com. Clockify is a mark of its owner.
 
-Until you select "Sign in with GitHub" in the settings, Mobile Timer for Clockify sends nothing to GitHub. Sign in uses the GitHub device flow. Mobile Timer for Clockify sends its public client ID and the scope `read:user` to `https://github.com/login/device/code` and shows you a code. While you enter the code at https://github.com/login/device, it asks `https://github.com/login/oauth/access_token` every few seconds whether sign in is done. The scope `read:user` is read-only access to your profile, which GitHub needs to show the sponsorship tier. It gives no access to repositories and no write access.
+Until you select "Sign in with GitHub" in the settings, Mobile Timer for Clockify sends nothing to GitHub. Sign in uses the GitHub device flow. Mobile Timer for Clockify sends its public client ID and the scope `read:user` to `https://github.com/login/device/code` and shows you a code. While you enter the code at https://github.com/login/device, it asks `https://github.com/login/oauth/access_token` every few seconds to check the sign-in status. The scope permits profile reads only. GitHub needs this access to show the sponsorship tier. It grants no repository scope and no write access.
 
-After sign in, Mobile Timer for Clockify sends one query to `https://api.github.com/graphql`: does the signed-in account sponsor theluckystrike, at which tier, and how much it has paid theluckystrike in total. It asks again at most once every 7 days, or when you select Refresh. It sends no note content, file names or other vault data to GitHub, and it has no telemetry.
+After sign in, Mobile Timer for Clockify sends one query to `https://api.github.com/graphql`. It checks if the signed-in account sponsors theluckystrike. It asks for the tier and the total payment to theluckystrike. The plugin reuses a successful check for 7 days. Failed checks can retry after 6 hours. Select Refresh to request an earlier check. It sends no note content, file names or other vault data to GitHub, and it has no telemetry.
 
-Pro keeps working for 14 days without a successful check. The GitHub token stays in the secret storage of Obsidian on this device. It is not written to data.json or other vault files, so it does not sync or reach a git repository. The local storage of this device keeps your GitHub login, the tier and the time of the last check. Sign out deletes the token. You can also revoke the access in your GitHub settings, under Applications.
+After a successful check, Pro can work offline for up to 14 days. Sign out or a negative sponsorship answer turns Pro off. The plugin stores the GitHub token through the secret storage API of Obsidian. It does not put the token in its saved settings or its local sponsorship data. The local storage of this device keeps your GitHub login, the tier and the time of the last check. Sign out clears the token. You can also revoke the access in your GitHub settings, under Applications.
 
 ## Support
 
