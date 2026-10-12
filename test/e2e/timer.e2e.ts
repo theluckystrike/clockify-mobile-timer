@@ -167,6 +167,39 @@ describe(`${pluginId} free tier with a stubbed Clockify`, function () {
 		await browser.waitUntil(async () => (await state()).current === null, { timeout: 8000 });
 	});
 
+	it('Start timer for this task uses the cleaned line at the cursor, and an empty line offers no command', async function () {
+		await browser.executeObsidian(async ({ app }) => {
+			const path = 'Notes/Task list.md';
+			const text = '- [ ] Write the [[People/Alice Smith|Alice]] reply \u{1F4C5} 2026-10-16\n\n';
+			const old = app.vault.getFileByPath(path);
+			if (old) await app.vault.modify(old, text);
+			else await app.vault.create(path, text);
+			const leaf = app.workspace.getLeaf(false);
+			await leaf.openFile(app.vault.getFileByPath(path)!, { state: { mode: 'source' } });
+		});
+		await browser.pause(500);
+		// checkCallback(true) is what the command palette asks; checkCallback(false) runs the command.
+		const run = (line: number, checking: boolean): Promise<{ text: string; ok: boolean }> =>
+			browser.executeObsidian(({ app }, id, ln, chk) => {
+				const editor = app.workspace.activeEditor!.editor!;
+				editor.setCursor({ line: ln, ch: 0 });
+				const cmd = (app as unknown as { commands: { findCommand(c: string): { checkCallback(c: boolean): boolean | void } } }).commands.findCommand(`${id}:start-task`);
+				return { text: editor.getLine(ln), ok: cmd.checkCallback(chk) === true };
+			}, pluginId, line, checking);
+		const before = (await calls()).length;
+		expect(await run(1, true)).toEqual({ text: '', ok: false });
+		await run(1, false);
+		await browser.pause(300);
+		expect((await calls()).length).toBe(before);
+		expect((await run(0, true)).ok).toBe(true);
+		await run(0, false);
+		await browser.waitUntil(async () => (await state()).current === 'Write the Alice reply', { timeout: 8000 });
+		const post = (await calls()).filter((c) => c.method === 'POST').at(-1)!;
+		expect(post.body).toMatchObject({ description: 'Write the Alice reply' });
+		await browser.executeObsidianCommand(`${pluginId}:stop`);
+		await browser.waitUntil(async () => (await state()).current === null, { timeout: 8000 });
+	});
+
 	it('HTTP 429 stops all requests until the wait ends and the pill says so', async function () {
 		await setMode('429');
 		const before = (await calls()).length;

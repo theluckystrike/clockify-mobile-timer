@@ -4840,6 +4840,238 @@
     null
    ],
    "expected": null
+  },
+  {
+   "name": "task plain checkbox",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Write the release notes"
+   ],
+   "expected": "Write the release notes"
+  },
+  {
+   "name": "task done checkbox",
+   "fn": "taskDescription",
+   "args": [
+    "- [x] Write the release notes"
+   ],
+   "expected": "Write the release notes"
+  },
+  {
+   "name": "task other checkbox status",
+   "fn": "taskDescription",
+   "args": [
+    "- [/] Review pull request"
+   ],
+   "expected": "Review pull request"
+  },
+  {
+   "name": "task star bullet",
+   "fn": "taskDescription",
+   "args": [
+    "* Call the bank"
+   ],
+   "expected": "Call the bank"
+  },
+  {
+   "name": "task numbered list",
+   "fn": "taskDescription",
+   "args": [
+    "12. Book flights"
+   ],
+   "expected": "Book flights"
+  },
+  {
+   "name": "task numbered paren",
+   "fn": "taskDescription",
+   "args": [
+    "3) Book flights"
+   ],
+   "expected": "Book flights"
+  },
+  {
+   "name": "task indented in a quote",
+   "fn": "taskDescription",
+   "args": [
+    "  > - [ ] Fix the login bug"
+   ],
+   "expected": "Fix the login bug"
+  },
+  {
+   "name": "task heading",
+   "fn": "taskDescription",
+   "args": [
+    "## Plan the sprint"
+   ],
+   "expected": "Plan the sprint"
+  },
+  {
+   "name": "task plain paragraph",
+   "fn": "taskDescription",
+   "args": [
+    "Just a sentence."
+   ],
+   "expected": "Just a sentence."
+  },
+  {
+   "name": "task wikilink",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Email [[Alice Smith]] about the invoice"
+   ],
+   "expected": "Email Alice Smith about the invoice"
+  },
+  {
+   "name": "task wikilink alias",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Ask [[People/Alice Smith|Alice]] for the file"
+   ],
+   "expected": "Ask Alice for the file"
+  },
+  {
+   "name": "task wikilink path no alias",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Read [[Projects/Acme/Plan]]"
+   ],
+   "expected": "Read Plan"
+  },
+  {
+   "name": "task embed removed",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Check ![[diagram.png]] sizes"
+   ],
+   "expected": "Check sizes"
+  },
+  {
+   "name": "task markdown link",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Read [the spec](https://example.com/spec) today"
+   ],
+   "expected": "Read the spec today"
+  },
+  {
+   "name": "task bold strike code",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] **Ship** ~~old~~ `v2` ==now=="
+   ],
+   "expected": "Ship old v2 now"
+  },
+  {
+   "name": "task block id",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Pay the rent ^rent-1"
+   ],
+   "expected": "Pay the rent"
+  },
+  {
+   "name": "task Tasks plugin dates",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Pay the rent 📅 2026-10-31 ⏫ 🔁 every month"
+   ],
+   "expected": "Pay the rent"
+  },
+  {
+   "name": "task Tasks plugin done date",
+   "fn": "taskDescription",
+   "args": [
+    "- [x] Pay the rent ✅ 2026-10-01"
+   ],
+   "expected": "Pay the rent"
+  },
+  {
+   "name": "task tag kept",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Draft the post #writing"
+   ],
+   "expected": "Draft the post #writing"
+  },
+  {
+   "name": "task spaces collapse",
+   "fn": "taskDescription",
+   "args": [
+    "-   [ ]    Many     spaces   here  "
+   ],
+   "expected": "Many spaces here"
+  },
+  {
+   "name": "task empty line",
+   "fn": "taskDescription",
+   "args": [
+    ""
+   ],
+   "expected": ""
+  },
+  {
+   "name": "task empty checkbox",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] "
+   ],
+   "expected": ""
+  },
+  {
+   "name": "task only marks",
+   "fn": "taskDescription",
+   "args": [
+    "> "
+   ],
+   "expected": ""
+  },
+  {
+   "name": "task heading marks only",
+   "fn": "taskDescription",
+   "args": [
+    "###"
+   ],
+   "expected": ""
+  },
+  {
+   "name": "task only metadata",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] 📅 2026-10-31"
+   ],
+   "expected": ""
+  },
+  {
+   "name": "task cut at 120",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   ],
+   "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+   "name": "task cut leaves no trailing space",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa bbb"
+   ],
+   "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+   "name": "task hash not a heading",
+   "fn": "taskDescription",
+   "args": [
+    "#hashtag only"
+   ],
+   "expected": "#hashtag only"
+  },
+  {
+   "name": "task dash inside text kept",
+   "fn": "taskDescription",
+   "args": [
+    "- [ ] Plan A - B"
+   ],
+   "expected": "Plan A - B"
   }
  ]
 }

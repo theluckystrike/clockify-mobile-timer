@@ -1,8 +1,8 @@
-import { Notice, Platform, Plugin, TFile, type WorkspaceLeaf } from 'obsidian';
+import { Notice, Platform, Plugin, TFile, type Editor, type WorkspaceLeaf } from 'obsidian';
 import type { SponsorsManager } from './license/index';
 import { createGitHubSponsors } from './license/github-obsidian';
 import { ClockifyClient, obsidianHttp } from './client';
-import { entrySeconds, findProject, formatClock, formatHours, formatWait, noteDescription, noteProjectRef } from './logic';
+import { entrySeconds, findProject, formatClock, formatHours, formatWait, noteDescription, noteProjectRef, taskDescription } from './logic';
 import { EditModal, StartModal } from './modals';
 import { SPONSORS, bindPro, isPro, resetPro } from './pro';
 import { renderReport } from './report';
@@ -115,6 +115,7 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 	private addCommands(): void {
 		this.addCommand({ id: 'start', name: 'Start timer', callback: () => this.openStart('Start timer') });
 		this.addCommand({ id: 'start-note', name: 'Start timer for this note', checkCallback: (c) => this.startForNote(c) });
+		this.addCommand({ id: 'start-task', name: 'Start timer for this task', editorCheckCallback: (c, editor, ctx) => this.startForTask(c, editor, ctx.file) });
 		this.addCommand({ id: 'stop', name: 'Stop timer', callback: () => void this.service.stop() });
 		this.addCommand({ id: 'switch', name: 'Switch timer', callback: () => this.openStart('Switch timer') });
 		this.addCommand({ id: 'toggle', name: 'Start or stop timer', callback: () => this.toggle() });
@@ -124,6 +125,12 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 	}
 
 	private registerEvents(): void {
+		this.registerEvent(
+			this.app.workspace.on('editor-menu', (menu, editor, info) => {
+				if (!taskDescription(editor.getLine(editor.getCursor().line))) return;
+				menu.addItem((item) => item.setTitle('Start timer for this task').setIcon('timer').onClick(() => this.startForTask(false, editor, info.file)));
+			}),
+		);
 		// A phone suspends the app: the elapsed time is derived from the start time on Clockify, and the data is refreshed
 		// only when the cache is older than the refresh setting.
 		this.registerDomEvent(document, 'visibilitychange', () => {
@@ -180,6 +187,14 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 			const req: StartRequest = { description: noteDescription(file.basename, this.settings.useNoteTitle), projectId: this.projectForNote(file), tags: [] };
 			void this.service.start(req);
 		}
+		return true;
+	}
+
+	/** Starts a timer with the line at the cursor as the description. A running timer stops first. A line with no text does nothing. */
+	private startForTask(checking: boolean, editor: Editor, file: TFile | null): boolean {
+		const description = taskDescription(editor.getLine(editor.getCursor().line));
+		if (!description) return false;
+		if (!checking) void this.service.start({ description, projectId: this.projectForNote(file), tags: [] });
 		return true;
 	}
 

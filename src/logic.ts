@@ -485,6 +485,24 @@ export function noteDescription(basename: string | null | undefined, useTitle: b
 	return useTitle && typeof basename === 'string' ? descriptionFromNote(basename) : '';
 }
 
+/** Marks that start the Tasks plugin metadata at the end of a task line: dates, priority, recurrence, id, dependency. */
+const TASK_META = /\s*[\u{1F4C5}\u{23F3}\u{1F6EB}\u{2795}\u{2705}\u{274C}\u{1F501}\u{1F3C1}\u{23EB}\u{1F53C}\u{1F53D}\u{23EC}\u{1F53A}\u{1F194}\u{26D4}].*$/u;
+
+/**
+ * The description that one line of a note offers to Clockify, for "Start timer for this task". It drops the quote, list and
+ * checkbox marks, the heading marks, a block id, the Tasks plugin metadata, link brackets (an alias or the last part of a
+ * path stays) and bold, strike, highlight and code marks. The text is cut at 120 characters (code points). A line with no text gives "".
+ */
+export function taskDescription(line: string): string {
+	let t = line.replace(TASK_META, '').replace(/\s\^[A-Za-z0-9-]+\s*$/, '');
+	t = t.replace(/^[\s>]*/, '').replace(/^(?:[-*+]|\d+[.)])(?:\s+|$)/, '').replace(/^\[[^\]]\](?:\s+|$)/, '').replace(/^#{1,6}(?:\s+|$)/, '');
+	t = t.replace(/!\[\[[^\]]*\]\]/g, '').replace(/\[\[[^\]|]*\|([^\]]*)\]\]/g, '$1');
+	t = t.replace(/\[\[([^\]]*)\]\]/g, (_m, target: string) => target.split('/').pop() ?? '');
+	t = t.replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\*\*|__|~~|==|`/g, '');
+	// Cut by code point, so the cut never leaves half an emoji (a lone surrogate) in the request.
+	return Array.from(t.replace(/\s+/g, ' ').trim()).slice(0, 120).join('').trim();
+}
+
 // ---------------------------------------------------------------- report block
 
 export interface ReportSpec {
@@ -551,6 +569,7 @@ export function evalVector(fn: string, args: unknown[]): unknown {
 		isoSeconds,
 		findProject,
 		noteProjectRef,
+		taskDescription,
 		parseTags,
 		parseReportSpec,
 		reportMarkdown,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ClockifyClient, MAX_PAGES, type Http } from '../src/client';
+import { ClockifyClient, MAX_PAGES, PAGE_SIZE, type Http } from '../src/client';
 import { FakeClockify, PROJ_CODE, PROJ_DOCS, TAG_X, UID, WS, wireEntry } from './fake-clockify';
 import { TimerService, emptyState, normalizeState, type ServiceDeps } from '../src/service';
 
@@ -376,6 +376,9 @@ describe('paged lists', () => {
 		const client = new ClockifyClient({ getToken: () => 'k', http: p.http, now: () => T0, onBudget: () => undefined });
 		await client.entriesAll(WS, UID, T0 - 86_400_000, T0);
 		expect(p.pages).toHaveLength(MAX_PAGES);
+	});
+	it('a report reads at most 2,000 entries, the number in the README', () => {
+		expect(PAGE_SIZE * MAX_PAGES).toBe(2000);
 	});
 });
 
