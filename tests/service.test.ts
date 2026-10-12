@@ -352,6 +352,29 @@ describe('TimerService', () => {
 		await svc.loadProjects();
 		expect(fake.calls.filter((c) => c.path.includes('/projects'))).toHaveLength(2);
 	});
+
+	it('a report counts each entry that Clockify sends, up to the 2,000 of the README, not only the first 1,000', async () => {
+		const fake = new FakeClockify();
+		const base = Date.parse('2026-10-06T00:00:00Z');
+		fake.entries = Array.from({ length: 1500 }, (_, i) => wireEntry(`ee${i.toString(16).padStart(22, '0')}`, new Date(base + i * 120_000).toISOString(), new Date(base + i * 120_000 + 60_000).toISOString()));
+		const { svc } = make(true, fake, { now: T0 });
+		const r = await svc.report({ range: 'week', by: 'project' });
+		expect(r).toMatchObject({ totalSeconds: 1500 * 60 });
+	});
+
+	it('with Pro a note project from its property is found when the project list is not loaded yet', async () => {
+		const fake = new FakeClockify();
+		const { svc } = make(true, fake, { now: T0 });
+		expect(svc.state.projects).toEqual([]);
+		expect(await svc.projectIdFor('Code')).toBe(PROJ_CODE);
+		expect(await svc.projectIdFor('code')).toBe(PROJ_CODE);
+		const n = fake.calls.length;
+		expect(await svc.projectIdFor('No such project')).toBeNull();
+		expect(await svc.projectIdFor(null)).toBeNull();
+		expect(fake.calls).toHaveLength(n);
+		await Promise.all([svc.loadProjects(true), svc.loadProjects(true)]);
+		expect(fake.calls).toHaveLength(n + 1);
+	});
 });
 
 describe('paged lists', () => {

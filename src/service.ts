@@ -1,6 +1,6 @@
 // Timer service: the state, the cache and the actions. It has no Obsidian import: the plugin gives it a client,
 // a clock and a few callbacks, so vitest runs it against a fake Clockify.
-import { RETRYABLE, validId, type ClockifyClient, type Reply } from './client';
+import { MAX_PAGES, PAGE_SIZE, RETRYABLE, validId, type ClockifyClient, type Reply } from './client';
 import {
 	APP_NAME,
 	LOCAL_PREFIX,
@@ -16,6 +16,7 @@ import {
 	rangeFor,
 	remainingNow,
 	enqueue,
+	findProject,
 	fromWire,
 	isLocalId,
 	stopBody,
@@ -181,6 +182,7 @@ export class TimerService {
 	/** Requests that are on their way, by range. A second report block for the same range waits for the first answer. */
 	private inflight = new Map<string, Promise<Reply<unknown[]>>>();
 	private refreshing: Promise<boolean> | null = null;
+	private projectsLoading: Promise<Project[]> | null = null;
 
 	constructor(deps: ServiceDeps, state: TimerState) {
 		this.deps = deps;
@@ -312,7 +314,17 @@ export class TimerService {
 		if (e && isRunning(e)) this.applyEntry(e);
 	}
 
-	async loadProjects(force = false): Promise<Project[]> {
+	/** A project list request that is on its way answers a second call too: the Start window and the note project can come together. */
+	loadProjects(force = false): Promise<Project[]> {
+		if (this.projectsLoading) return this.projectsLoading;
+		const run = this.loadProjectsOnce(force).finally(() => {
+			this.projectsLoading = null;
+		});
+		this.projectsLoading = run;
+		return run;
+	}
+
+	private async loadProjectsOnce(force: boolean): Promise<Project[]> {
 		const now = this.deps.now();
 		if (!force && this.state.projectsAt !== null && now - this.state.projectsAt < LIST_TTL_MS) return this.state.projects;
 		const who = await this.identity();
@@ -348,6 +360,13 @@ export class TimerService {
 		this.state.tagsAt = now;
 		this.changed();
 		return this.state.tags;
+	}
+
+	/** The project id for a note property (a name or an id). Loads the project list first when it is empty or old (1 request). */
+	async projectIdFor(ref: string | null): Promise<string | null> {
+		if (!ref) return null;
+		const hit = findProject(this.state.projects, ref) ?? findProject(await this.loadProjects(), ref);
+		return hit?.id ?? null;
 	}
 
 	// ------------------------------------------------------------ start, stop, switch
@@ -580,7 +599,7 @@ export class TimerService {
 			}
 			const r = await pending;
 			if (r.ok) {
-				entries = cleanList(r.data, cleanEntry, 1000);
+				entries = cleanList(r.data, cleanEntry, PAGE_SIZE * MAX_PAGES);
 				at = now;
 				this.reports.set(key, { entries, at });
 				this.offline = false;

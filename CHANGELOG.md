@@ -1,5 +1,11 @@
 # clockify-mobile-timer
 
+## 1.1.1
+
+### Patch Changes
+
+- d55a241: Reports count up to 2,000 entries, a note project from its property loads the project list when needed, and the README and manifest claims match the code.
+
 ## 1.1.0
 
 ### Minor Changes

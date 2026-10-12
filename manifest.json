@@ -1,9 +1,9 @@
 {
 	"id": "clockify-mobile-timer",
 	"name": "Mobile Timer for Clockify",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"minAppVersion": "1.13.4",
-	"description": "Starts, stops and switches your Clockify timer from a note, on phone and desktop, and shows the running timer and today's total.",
+	"description": "Starts, stops and switches your Clockify timer from a note and shows the running timer and today's total.",
 	"author": "Michael Lip",
 	"authorUrl": "https://github.com/theluckystrike",
 	"fundingUrl": "https://github.com/sponsors/theluckystrike",

@@ -2,11 +2,11 @@ import { Notice, Platform, Plugin, TFile, type Editor, type WorkspaceLeaf } from
 import type { SponsorsManager } from './license/index';
 import { createGitHubSponsors } from './license/github-obsidian';
 import { ClockifyClient, obsidianHttp } from './client';
-import { entrySeconds, findProject, formatClock, formatHours, formatWait, noteDescription, noteProjectRef, taskDescription } from './logic';
+import { entrySeconds, formatClock, formatHours, formatWait, noteDescription, noteProjectRef, taskDescription } from './logic';
 import { EditModal, StartModal } from './modals';
 import { SPONSORS, bindPro, isPro, resetPro } from './pro';
 import { renderReport } from './report';
-import { TimerService, emptyState, normalizeState, type StartRequest } from './service';
+import { TimerService, emptyState, normalizeState } from './service';
 import { DEFAULT_SETTINGS, ClockifyMobileTimerSettingTab, normalizeSettings, type ClockifyMobileTimerSettings } from './settings';
 import { TimerView, VIEW_ID } from './view';
 import type { TimeEntry } from './logic';
@@ -167,11 +167,10 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 	}
 
 	/** The project for a timer that starts from a note: Pro property "clockify-project", else the default project. */
-	projectForNote(file: TFile | null): string | null {
+	async projectForNote(file: TFile | null): Promise<string | null> {
 		if (file && isPro()) {
-			const ref = noteProjectRef(this.app.metadataCache.getFileCache(file)?.frontmatter);
-			const hit = ref ? findProject(this.service.state.projects, ref) : null;
-			if (hit) return hit.id;
+			const id = await this.service.projectIdFor(noteProjectRef(this.app.metadataCache.getFileCache(file)?.frontmatter));
+			if (id !== null) return id;
 		}
 		return this.defaultProjectId();
 	}
@@ -184,8 +183,8 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 		const file = this.app.workspace.getActiveFile();
 		if (!file) return false;
 		if (!checking) {
-			const req: StartRequest = { description: noteDescription(file.basename, this.settings.useNoteTitle), projectId: this.projectForNote(file), tags: [] };
-			void this.service.start(req);
+			const description = noteDescription(file.basename, this.settings.useNoteTitle);
+			void this.projectForNote(file).then((projectId) => this.service.start({ description, projectId, tags: [] }));
 		}
 		return true;
 	}
@@ -194,18 +193,23 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 	private startForTask(checking: boolean, editor: Editor, file: TFile | null): boolean {
 		const description = taskDescription(editor.getLine(editor.getCursor().line));
 		if (!description) return false;
-		if (!checking) void this.service.start({ description, projectId: this.projectForNote(file), tags: [] });
+		if (!checking) void this.projectForNote(file).then((projectId) => this.service.start({ description, projectId, tags: [] }));
 		return true;
 	}
 
 	openStart(title: string): void {
+		void this.openStartAsync(title);
+	}
+
+	/** With Pro the project and tag lists load (cached for 6 hours). The window waits for them only when no project list is saved yet. */
+	private async openStartAsync(title: string): Promise<void> {
 		const file = this.app.workspace.getActiveFile();
-		const projectId = this.projectForNote(file);
 		const svc = this.service;
 		if (isPro()) {
-			void svc.loadProjects();
-			void svc.loadTags();
+			const lists = Promise.all([svc.loadProjects(), svc.loadTags()]);
+			if (svc.state.projects.length === 0) await lists;
 		}
+		const projectId = await this.projectForNote(file);
 		const def = svc.state.projects.find((p) => p.id === this.defaultProjectId());
 		new StartModal(this.app, {
 			title,
