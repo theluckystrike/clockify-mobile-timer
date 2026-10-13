@@ -36,7 +36,7 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 		this.settings = normalizeSettings(saved.settings);
 		this.service = this.makeService(normalizeState(saved.state));
 		// No request here: a request needs a GitHub sign in first (Settings, Pro, Sign in with GitHub).
-		const pro = createGitHubSponsors(this.app, this.manifest.id, SPONSORS);
+		const pro = createGitHubSponsors(this.app, this.manifest.id, SPONSORS, this);
 		pro.init();
 		this.pro = pro;
 		bindPro(pro);
