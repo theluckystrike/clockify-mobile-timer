@@ -2,7 +2,7 @@
 
 Mobile Timer for Clockify starts, stops and switches your Clockify timer from a note. It shows the running timer and today's total.
 
-It is an unofficial plugin, not affiliated with Clockify or CAKE.com. You need your own Clockify account and API key. Pro is optional.
+It is an unofficial plugin, not affiliated with Clockify or CAKE.com.
 
 ## Features
 
@@ -14,7 +14,7 @@ It is an unofficial plugin, not affiliated with Clockify or CAKE.com. You need y
 
 Run "Start timer", enter a description (the window offers the note name) and select Start. "Stop timer" stops it. "Switch timer" stops the running one and starts a new one.
 
-"Start timer for this note" starts at once with no window. Both send the note name to Clockify as the description. A setting turns that off. Free timers get one default project.
+"Start timer for this note" starts at once with no window. Free timers get one default project.
 
 ### Start a timer from a task line
 
@@ -82,7 +82,7 @@ To install by hand, put `main.js`, `manifest.json` and `styles.css` from the lat
 ## Usage
 
 1. In Clockify, open your profile settings, then API, and select Generate. If your workspace is on a subdomain, generate the key there.
-2. In the plugin settings, select the API key field, create a secret and paste the key. Select Check connection.
+2. In the plugin settings, select the API key field, create a secret and paste the key. The key does not sync, so do this on each device. Select Check connection.
 3. Open a note and run "Start timer".
 
 A timer that you start in Clockify shows after the next refresh.
@@ -91,15 +91,15 @@ A timer that you start in Clockify shows after the next refresh.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/clockify-mobile-timer/HEAD/docs/pro-settings.png" alt="The Pro section of the settings before sign in, with the sponsor button and the GitHub sign in" width="720">
 
-Pro unlocks the features marked (Pro). $5 a month, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply.
+Pro unlocks the features marked (Pro).
 
 1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike).
 2. In the plugin settings, select "Sign in with GitHub".
 3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
 
-See [Payment, account and network](#payment-account-and-network) for the check and offline limits.
-
 ## Settings
+
+After a minor or major update, this plugin opens one What's new tab in the background. The tab and settings card suggest other NoteMods plugins and Zovo Chat and link to notemods.com for feedback ([privacy](https://notemods.com/privacy/)). The tab sends no data. Turn the tab off in Settings.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/clockify-mobile-timer/HEAD/docs/settings.png" alt="Settings with the API key in secret storage, the default project, the status bar switch and the note title switch" width="720">
 
@@ -115,15 +115,11 @@ See [Payment, account and network](#payment-account-and-network) for the check a
 
 ### Can I use it on a phone?
 
-The manifest does not set it to desktop only. The automatic tests run on desktop only. On a phone, use the timer panel.
+Yes. The automatic tests run on desktop only.
 
 ### Which entries does the day total count?
 
 The entries that start yesterday or today, up to 300, cut at local midnight. A timer that started before yesterday shows after "Refresh timer". The plugin uses your default Clockify workspace.
-
-### Does the key sync to my other devices?
-
-No. Obsidian keeps secrets on the device. Paste the key on each device.
 
 ## Payment, account and network
 
@@ -141,7 +137,7 @@ After a successful check, Pro can work offline for up to 14 days. Sign out or a 
 
 ## Support
 
-Report a bug or ask for a feature in the issue tracker of this repository. To support the work, use [GitHub Sponsors](https://github.com/sponsors/theluckystrike).
+Report a bug or ask for a feature in the issue tracker of this repository.
 
 ```
 npm ci

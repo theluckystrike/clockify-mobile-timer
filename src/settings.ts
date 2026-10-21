@@ -3,6 +3,7 @@ import { sponsorsSettingItems } from './license/github-obsidian';
 import { PRO_UI, isPro } from './pro';
 import { HOURLY_CAP, formatWait } from './logic';
 import type ClockifyMobileTimerPlugin from './main';
+import { helloSettingItems } from './hello/settings';
 
 export interface ClockifyMobileTimerSettings {
 	/** Name of the secret in Obsidian secret storage. The token itself is never in data.json. */
@@ -77,6 +78,11 @@ export class ClockifyMobileTimerSettingTab extends PluginSettingTab {
 	}
 
 	getSettingDefinitions(): SettingDefinitionItem[] {
+		// The product rows, then the "More from NoteMods" card (packages/hello).
+		return [...this.productSettingDefinitions(), ...helloSettingItems()];
+	}
+
+	productSettingDefinitions(): SettingDefinitionItem[] {
 		return [
 			...(this.plugin.pro ? sponsorsSettingItems(this.plugin.pro, PRO_UI) : []),
 			{

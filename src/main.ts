@@ -10,6 +10,8 @@ import { TimerService, emptyState, normalizeState } from './service';
 import { DEFAULT_SETTINGS, ClockifyMobileTimerSettingTab, normalizeSettings, type ClockifyMobileTimerSettings } from './settings';
 import { TimerView, VIEW_ID } from './view';
 import type { TimeEntry } from './logic';
+import { setupHello } from './hello/index';
+import WHATS_NEW from './whats-new.json';
 
 /** How often to ask the license state whether a check is due. It sends a request only when signed in and due (7 days). */
 const PRO_TICK_MS = 6 * 60 * 60 * 1000;
@@ -32,6 +34,8 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 	private saveTimer: number | null = null;
 
 	async onload(): Promise<void> {
+		// First: "What's new" reads its state before the settings load (packages/hello). It does not wait.
+		setupHello(this, WHATS_NEW);
 		const saved = ((await this.loadData()) as SavedData | null) ?? {};
 		this.settings = normalizeSettings(saved.settings);
 		this.service = this.makeService(normalizeState(saved.state));
