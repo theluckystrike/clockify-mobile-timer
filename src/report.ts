@@ -1,7 +1,7 @@
 // The clockify-report code block (Pro): hours by project, day or description for a range.
 import { MarkdownRenderChild, type MarkdownPostProcessorContext } from 'obsidian';
 import { decimalHours, formatHours, parseReportSpec, reportMarkdown } from './logic';
-import { isPro, onProChange } from './pro';
+import { isPro, onProChange, proText } from './pro';
 import type { Report } from './service';
 import type ClockifyMobileTimerPlugin from './main';
 
@@ -30,7 +30,7 @@ function drawBlock(plugin: ClockifyMobileTimerPlugin, source: string, el: HTMLEl
 		return;
 	}
 	if (!isPro()) {
-		el.createDiv({ cls: 'tmt-locked', text: 'The report block is a pro feature. Sponsor on GitHub, then sign in from the plugin settings.' });
+		el.createDiv({ cls: 'tmt-locked', text: proText('The report block is a pro feature.') });
 		return;
 	}
 	const body = el.createDiv({ text: 'Loading from Clockify...' });

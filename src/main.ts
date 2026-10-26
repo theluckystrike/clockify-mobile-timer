@@ -4,7 +4,7 @@ import { createGitHubSponsors } from './license/github-obsidian';
 import { ClockifyClient, obsidianHttp } from './client';
 import { entrySeconds, formatClock, formatHours, formatWait, noteDescription, noteProjectRef, taskDescription } from './logic';
 import { EditModal, StartModal } from './modals';
-import { SPONSORS, bindPro, isPro, resetPro } from './pro';
+import { SPONSORS, bindPro, isPro, resetPro, proNotice } from './pro';
 import { renderReport } from './report';
 import { TimerService, emptyState, normalizeState } from './service';
 import { DEFAULT_SETTINGS, ClockifyMobileTimerSettingTab, normalizeSettings, type ClockifyMobileTimerSettings } from './settings';
@@ -153,7 +153,7 @@ export default class ClockifyMobileTimerPlugin extends Plugin {
 	}
 
 	needsPro(feature: string): void {
-		new Notice(`${feature} is a pro feature. Sponsor on GitHub, then sign in from the plugin settings.`);
+		proNotice(`${feature} is a pro feature.`);
 	}
 
 	private onProChange(): void {
