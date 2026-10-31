@@ -93,7 +93,7 @@ A timer that you start in Clockify shows after the next refresh.
 
 Pro unlocks the features marked (Pro).
 
-1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike).
+1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=clockify-mobile-timer).
 2. In the plugin settings, select "Sign in with GitHub".
 3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
 
@@ -125,7 +125,7 @@ The entries that start yesterday or today, up to 300, cut at local midnight. A t
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
 
-GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike. You need a Clockify account for every feature, free or Pro. Pro also needs the GitHub account that sponsors.
+GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=clockify-mobile-timer. You need a Clockify account for every feature, free or Pro. Pro also needs the GitHub account that sponsors.
 
 Mobile Timer for Clockify talks to Clockify through its public API at `https://api.clockify.me/api/v1`, only after you save a Clockify API key in the settings. It stays in the secret storage of Obsidian on this device, not in data.json or in a note. Each request carries it in the X-Api-Key header. When you start, stop, edit or delete a timer, the plugin sends the time entry data the call needs: the description, the project id, the tag ids, the start and end time, and, on an edit, the task id and the billable flag. The workspace id, the user id and the entry id are in the address of the request. When you start a timer from a note, the title of the note becomes the description and is sent to Clockify. That happens when you run "Start timer for this note", and when you select Start in the Start window, which opens with the title in its box. The title is the file name without the folder and the extension, cut at 120 characters. Turn off "Use the note title as the description" to send no title. When you run "Start timer for this task", the text of the line at the cursor becomes the description and is sent to Clockify, without list marks, link brackets and Tasks plugin dates. The note title setting does not change this. The plugin sends no other note content, no folder path and no other vault data, and it has no telemetry. It reads your name, user id, default workspace, projects, tags, running timer and time entries from Clockify when Obsidian opens, when you return to the app or go online, when you open the panel, when you select Refresh, Check connection or Load projects, and when a report block draws. With Pro it also reads when you open the Start window or start a timer from a note whose project is not in the saved list. Each request shows Clockify your IP address. The plugin keeps a copy of your recent entries, projects, tags and queued changes in data.json in your vault. Mobile Timer for Clockify is an unofficial plugin. It is not affiliated with, made by or approved by Clockify or CAKE.com. Clockify is a mark of its owner.
 
