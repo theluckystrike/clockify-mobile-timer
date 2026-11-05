@@ -91,11 +91,11 @@ A timer that you start in Clockify shows after the next refresh.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/clockify-mobile-timer/HEAD/docs/pro-settings.png" alt="The Pro section of the settings before sign in, with the sponsor button and the GitHub sign in" width="720">
 
-Pro unlocks the features marked (Pro).
+Pro unlocks the (Pro) features.
 
 1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=clockify-mobile-timer).
 2. In the plugin settings, select "Sign in with GitHub".
-3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
+3. Paste the code at github.com/login/device and approve.
 
 ## Settings
 
@@ -124,6 +124,8 @@ The entries that start yesterday or today, up to 300, cut at local midnight. A t
 ## Payment, account and network
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
+
+[One payment turns on Pro in every NoteMods plugin](https://notemods.com/pro/).
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=clockify-mobile-timer. You need a Clockify account for every feature, free or Pro. Pro also needs the GitHub account that sponsors.
 
