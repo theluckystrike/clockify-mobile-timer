@@ -1,8 +1,9 @@
 {
 	"id": "clockify-mobile-timer",
 	"name": "Mobile Timer for Clockify",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"changes": [
+		"The Pro notice of Mobile Timer for Clockify now says that one payment turns on Pro in every NoteMods plugin.",
 		"The Pro notice for the offline queue now has a Sponsor on GitHub button."
 	],
 	"tip": "Put the cursor on a task line and run 'Start timer for this task' to time it.",
